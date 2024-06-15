@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body,
+:root,
+#app,
+* {
+  --sl-font-sans: system-ui, san-serif;
+  --sl-font-serif: system-ui, serif;
+  --sl-font-mono: system-ui, monospace;
+  font-family: system-ui;
+}
+
+html,
+body,
+:root,
+#app {
+  overflow-x: hidden;
+  scrollbar-color: var(--sl-color-neutral-500) var(--sl-color-neutral-0);
+}
+
+html,
+body {
+  background: (--sl-overlay-background-color);
+}
+
+:root,
+:host,
+.sl-theme-light {
+  color-scheme: light;
+  --overlayed-background: #d1d0d3;
+}
+
+:host,
+.sl-theme-dark {
+  color-scheme: dark;
+  --overlayed-background: #0f0f11;
+}
+
+html,
+body {
+  background: var(--sl-color-neutral-0);
+}
+
+html:has(sl-dialog[open]),
+body:has(sl-dialog[open]) {
+  background: var(--overlayed-background);
+}
+
+#app {
+  width: 100%;
+  min-width: 100vw;
+  height: 100%;
+  min-height: 100vh;
+  background: var(--sl-color-neutral-0);
+}
+
+@media only screen and (max-width: 350px) {
+  html,
+  body,
+  :root,
+  #app,
+  * {
+    font-size: 4.5vw;
+  }
+}
+
+sl-tree-item img {
+  position: relative;
+}
+
+/* remove default outline to make way for our outline */
+sl-tree-item:focus-visible::part(item) {
+  outline: none;
+}
+
+sl-tree-item:focus-visible > div.actions-container {
+  outline: 0.2rem solid var(--sl-color-primary-700);
+  outline-offset: -0.2rem;
+}
+
+div.actions-container sl-button-group {
+  opacity: 0;
+}
+
+div.actions-container:hover sl-button-group,
+div.actions-container sl-button-group:focus-within {
+  opacity: 1;
+}
+
+div.actions-container:hover sl-button-group,
+sl-tree-item::part(item):hover {
+  background: var(--sl-color-neutral-200);
+}
+
+div.actions-container sl-button-group {
+  background: var(--sl-color-neutral-0);
+}
+
+sl-dialog div.actions-container sl-button-group {
+  background: var(--sl-color-neutral-50);
+}
+
+sl-tree-item[selected] sl-button-group {
+  background: var(--sl-color-neutral-100);
+}
+
+sl-dialog sl-tree-item[selected] sl-button-group {
+  background: var(--sl-color-neutral-100);
+}
+
+sl-tree-item sl-icon-button::part(base):focus-visible {
+  outline: 0.2rem solid var(--sl-color-primary-700);
+  outline-offset: -0.2rem;
+}
+
+div.actions-container {
+  z-index: 2;
+}
+
+sl-dialog::part(panel) {
+  position: absolute;
+  top: 7rem;
+}
+
+sl-dialog::part(title) {
+  font-size: 1.1rem;
+}
+
+form.dialog-form sl-input,
+form.dialog-form sl-select {
+  margin-bottom: 1rem;
+}
+
+form.dialog-form sl-input:last-child,
+form.dialog-form sl-select:last-child {
+  margin-bottom: 0;
+}
+
+sl-button::part(label) {
+  font-size: 1rem;
+}
+
+.sl-toast-stack {
+  top: auto;
+  bottom: 0;
+}
+
+sl-dialog::part(panel) {
+  max-height: 80vh;
+}

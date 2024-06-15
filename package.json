@@ -1,0 +1,26 @@
+{
+  "name": "bible-chrome-extension",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "cp manifest-dev.json public/manifest.json && vite build --outDir dist-dev --sourcemap true --minify false",
+    "dev": "concurrently \"cp manifest-dev.json public/manifest.json && vite build --outDir dist-dev --watch --sourcemap true --minify false\" \"tsc --watch\"",
+    "package": "cp manifest-prod.json public/manifest.json && vite build && zip -r bible-chrome-extension.zip dist/ && rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "chrome-types": "^0.1.287",
+    "concurrently": "^8.2.2",
+    "ts-lit-plugin": "^2.0.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.0"
+  },
+  "dependencies": {
+    "@atlaskit/pragmatic-drag-and-drop": "^1.1.12",
+    "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.0.3",
+    "@shoelace-style/shoelace": "^2.15.1",
+    "lit": "^3.1.4",
+    "promethium-js": "^0.14.0"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": false,
+    "experimentalDecorators": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["chrome-types"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin"
+      }
+    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Easy imports */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* JSX */
+    "jsx": "react-jsx",
+    "jsxImportSource": "promethium-js"
+  },
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
