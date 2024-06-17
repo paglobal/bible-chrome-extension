@@ -11,8 +11,6 @@ GitHub Repository for [Bible Chrome Extension]().
 
 ### Important
 
-- start
-- split screen icon
 - close icon
 - search icon
 - bookmarks icon
