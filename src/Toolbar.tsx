@@ -22,7 +22,6 @@ export function Toolbar() {
         style=${styleMap({
           fontSize: "1rem",
           paddingTop: "0.5rem",
-          paddingBottom: "0.75rem",
         })}
       >
         <sl-icon-button
@@ -39,7 +38,7 @@ export function Toolbar() {
         ></sl-icon-button>
         <sl-icon-button
           src=${windowStackIcon}
-          title="Switch Tab"
+          title="Switch View"
           @click=${async () => {
             // @handled
             try {
@@ -77,7 +76,7 @@ export function Toolbar() {
         ></sl-icon-button>
         <sl-icon-button
           src=${xLgIcon}
-          title="Close Tab"
+          title="Close View"
           @click=${() => {
             // @handled
             try {

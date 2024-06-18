@@ -1,11 +1,11 @@
 import { html } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
 
-export function TreeItemIcon(props: { icon: string }) {
+export function TreeItemIcon(props: { iconUrl: string }) {
   return () => {
     return html`
       <sl-icon
-        name=${props.icon}
+        src=${props.iconUrl}
         style=${styleMap({
           width: "1.4rem",
           height: "1.4rem",

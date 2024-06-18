@@ -35,30 +35,7 @@ body,
 
 html,
 body {
-  background: (--sl-overlay-background-color);
-}
-
-:root,
-:host,
-.sl-theme-light {
-  color-scheme: light;
-  --overlayed-background: #d1d0d3;
-}
-
-:host,
-.sl-theme-dark {
-  color-scheme: dark;
-  --overlayed-background: #0f0f11;
-}
-
-html,
-body {
-  background: var(--sl-color-neutral-0);
-}
-
-html:has(sl-dialog[open]),
-body:has(sl-dialog[open]) {
-  background: var(--overlayed-background);
+  background: var(--sl-color-neutral-50);
 }
 
 @media only screen and (max-width: 350px) {
@@ -144,7 +121,7 @@ form.dialog-form sl-select:last-child {
 }
 
 sl-button::part(label) {
-  font-size: 1rem;
+  font-size: var(--sl-font-size-medium);
 }
 
 .sl-toast-stack {
@@ -154,4 +131,19 @@ sl-button::part(label) {
 
 sl-dialog::part(panel) {
   max-height: 80vh;
+  bottom: 8rem;
+  top: initial;
+}
+
+sl-button.indicator::part(label) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+sl-select::part(combobox) {
+  --sl-input-focus-ring-color: var(--sl-color-primary-700);
+}
+
+sl-select::part(display-input) {
+  text-align: center;
 }
