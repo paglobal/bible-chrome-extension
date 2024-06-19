@@ -131,8 +131,7 @@ sl-button::part(label) {
 
 sl-dialog::part(panel) {
   max-height: 80vh;
-  bottom: 8rem;
-  top: initial;
+  top: 4rem;
 }
 
 sl-button.indicator::part(label) {

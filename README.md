@@ -9,11 +9,12 @@ GitHub Repository for [Bible Chrome Extension]().
 
 ## Task List
 
-### Important
+- implement views and actual bible functionality
+- implement strongs and cross-references
+- implement search functionality
+- implement bookmarking functionality
 
-- close icon
-- search icon
-- bookmarks icon
+### Important
 
 ### Store listing
 

@@ -11,6 +11,7 @@ import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
 import "@shoelace-style/shoelace/dist/components/select/select.js";
 import "@shoelace-style/shoelace/dist/components/divider/divider.js";
 import "@shoelace-style/shoelace/dist/components/option/option.js";
+import "@shoelace-style/shoelace/dist/components/switch/switch.js";
 import type SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import { ChapterIndicator } from "./ChapterIndicator";
 import { Toolbar } from "./Toolbar";
@@ -19,13 +20,20 @@ import { Dialog } from "./Dialog";
 import { Tree } from "./Tree";
 import { TreeItem } from "./TreeItem";
 import { TreeItemIcon } from "./TreeItemIcon";
-import windowStackIcon from "./assets/icons/window-stack.svg";
+import lucideScrollTextIcon from "./assets/icons/LucideScrollText.svg";
 
 // disable animations for all tree items
 setDefaultAnimation("tree-item.expand", null);
 setDefaultAnimation("tree-item.collapse", null);
 
-export const bookSelectDialogRef = createRef<SlDialog>();
+export const bookSelectTreeDialogRef = createRef<SlDialog>();
+export const chapterSelectDialogRef = createRef<SlDialog>();
+export const verseSelectDialogRef = createRef<SlDialog>();
+export const switchViewTreeDialogRef = createRef<SlDialog>();
+export const bookmarksTreeDialogRef = createRef<SlDialog>();
+export const searchScriptureDialogRef = createRef<SlDialog>();
+export const verseReferenceTreeDialogRef = createRef<SlDialog>();
+export const strongsViewDialogRef = createRef<SlDialog>();
 
 function App() {
   return () =>
@@ -53,7 +61,7 @@ function App() {
             <Toolbar />
             <Dialog
               label="Select Book"
-              ref={bookSelectDialogRef}
+              ref={bookSelectTreeDialogRef}
               fullWidth
               noTopBodyMargin
             >
@@ -68,14 +76,16 @@ function App() {
                 <sl-option value="WEB">WEB</sl-option>
               </sl-select>`}
               {html`<sl-divider
-                style=${styleMap({ marginBottom: "0.5rem" })}
+                style=${styleMap({ marginBottom: "1rem" })}
               ></sl-divider>`}
               <Tree
                 contentFn={() =>
                   map(range(66), () => {
                     return (
                       <TreeItem tooltipContent="Genesis">
-                        {html`${(<TreeItemIcon iconUrl={windowStackIcon} />)}`}
+                        {html`${(
+                          <TreeItemIcon iconUrl={lucideScrollTextIcon} />
+                        )}`}
                         {"Genesis"}
                       </TreeItem>
                     );

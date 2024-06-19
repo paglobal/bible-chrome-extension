@@ -1,7 +1,7 @@
 import { html } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
 import { notifyWithErrorMessageAndReloadButton } from "./utils";
-import { bookSelectDialogRef } from "./App";
+import { bookSelectTreeDialogRef } from "./App";
 import caretLeftFill from "./assets/icons/caret-left-fill.svg";
 import caretRightFill from "./assets/icons/caret-right-fill.svg";
 
@@ -38,7 +38,7 @@ export function ChapterIndicator() {
         @click=${() => {
           // @handled
           try {
-            bookSelectDialogRef.value?.show();
+            bookSelectTreeDialogRef.value?.show();
           } catch (error) {
             console.error(error);
             notifyWithErrorMessageAndReloadButton();
