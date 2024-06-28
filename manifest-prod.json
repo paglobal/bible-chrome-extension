@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "minimum_chrome_version": "70",
   "description": "Study the Bible right from your browser.",
-  "permissions": ["sidePanel", "bookmarks"],
+  "permissions": ["sidePanel", "storage", "bookmarks"],
   "icons": {
     "16": "assets/icons/icon-16.png",
     "32": "assets/icons/icon-32.png",

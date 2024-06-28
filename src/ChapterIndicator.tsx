@@ -4,9 +4,25 @@ import { notifyWithErrorMessageAndReloadButton } from "./utils";
 import { bookSelectTreeDialogRef } from "./App";
 import caretLeftFill from "./assets/icons/caret-left-fill.svg";
 import caretRightFill from "./assets/icons/caret-right-fill.svg";
+import { Verse, activeViewDatum } from "./viewService";
+import { activeViewId } from "./viewService";
+import { tableOfContents } from "./constants";
 
 export function ChapterIndicator() {
   return () => {
+    const _activeViewDatum = activeViewDatum();
+    const _activeViewId = activeViewId();
+    let nextChapterUpdateInfo: Verse | null = null;
+    let prevChapterUpdateInfo: Verse | null = null;
+    if (_activeViewDatum) {
+      let book_name = _activeViewDatum.book_name;
+      // let book = _activeViewDatum.book;
+      let chapter = _activeViewDatum.chapter;
+      let verse = _activeViewDatum.verse;
+      if (tableOfContents) {
+      }
+    }
+
     return html`<div
       style=${styleMap({
         paddingTop: "1.5rem",
@@ -34,6 +50,7 @@ export function ChapterIndicator() {
           width: "calc(100% - 6rem)",
           overflow: "hidden",
           textOverflow: "ellipsis",
+          padding: "0.5rem",
         })}
         @click=${() => {
           // @handled
@@ -44,8 +61,16 @@ export function ChapterIndicator() {
             notifyWithErrorMessageAndReloadButton();
           }
         }}
-        title="1 Thessalonians - KJV"
-        >1 Thessalonians - KJV
+        title=${_activeViewDatum
+          ? `${_activeViewDatum.book_name} ${
+              _activeViewDatum.chapter
+            } - ${_activeViewDatum.versionId.toUpperCase()}`
+          : ""}
+        >${_activeViewDatum
+          ? `${_activeViewDatum.book_name} ${
+              _activeViewDatum.chapter
+            } - ${_activeViewDatum.versionId.toUpperCase()}`
+          : ""}
       </sl-button>
       <sl-button
         variant="primary"

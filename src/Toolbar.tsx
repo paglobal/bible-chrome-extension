@@ -22,7 +22,6 @@ export function Toolbar() {
         label="Tools"
         style=${styleMap({
           fontSize: "1rem",
-          paddingTop: "0.5rem",
         })}
       >
         <sl-switch

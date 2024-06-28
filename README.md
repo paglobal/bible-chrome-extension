@@ -9,6 +9,7 @@ GitHub Repository for [Bible Chrome Extension]().
 
 ## Task List
 
+- on startup: 1. check for presence of views 2. check for presence of bookmarks folder
 - implement views and actual bible functionality
 - implement strongs and cross-references
 - implement search functionality

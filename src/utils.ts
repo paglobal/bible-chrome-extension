@@ -1,4 +1,5 @@
 import { SlAlert } from "@shoelace-style/shoelace";
+import { type LocalStorageKey, AreaName } from "./constants";
 
 // copied from "https://shoelace.style/components/alert" and slightly modified
 export function notify(
@@ -33,4 +34,34 @@ export function notifyWithErrorMessageAndReloadButton() {
     .forEach((button) =>
       button.addEventListener("click", () => location.reload()),
     );
+}
+
+export async function getStorageData<T = unknown>(key: LocalStorageKey) {
+  const areaName = key.split("-")[0] as AreaName;
+
+  return (await chrome.storage[areaName].get(key))[key] as T | undefined;
+}
+
+export async function setStorageData<T = unknown>(
+  key: LocalStorageKey,
+  value: T,
+) {
+  const areaName = key.split("-")[0] as AreaName;
+  chrome.storage[areaName].set({ [key]: value });
+}
+
+export async function subscribeToStorageData<T = unknown>(
+  key: LocalStorageKey,
+  fn: (changes: { newValue: T | undefined; oldValue: T | undefined }) => void,
+) {
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    const keyAreaName = key.split("-")[0] as AreaName;
+    if (areaName === keyAreaName) {
+      const newStorageData = changes[key]?.newValue;
+      const oldStorageData = changes[key]?.oldValue;
+      if (newStorageData !== undefined || oldStorageData !== undefined) {
+        fn({ newValue: newStorageData, oldValue: oldStorageData });
+      }
+    }
+  });
 }

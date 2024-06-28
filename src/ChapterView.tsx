@@ -1,8 +1,6 @@
 import { html } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
-import { range } from "lit/directives/range.js";
-import { map } from "lit/directives/map.js";
-import "@shoelace-style/shoelace/dist/components/card/card.js";
+import { displayedVerses } from "./viewService";
 
 export function ChapterView() {
   return () =>
@@ -13,9 +11,8 @@ export function ChapterView() {
         marginTop: "1rem",
       })}
     >
-      ${map(
-        range(8),
-        (_, index) => html`
+      ${displayedVerses().map(
+        (verse, index) => html`
           <div
             style=${styleMap({
               fontSize: "var(--sl-font-size-medium)",
@@ -34,9 +31,7 @@ export function ChapterView() {
               })}
               >${index + 1}</span
             >
-            In the beginning was the Word, and the Word was with God and the
-            Word was God. In the beginning was the Word, and the Word was with
-            God and the Word was God.
+            ${verse.text.replace("\u00b6", "")}
           </div>
         `,
       )}
