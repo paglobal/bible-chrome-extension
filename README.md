@@ -9,11 +9,26 @@ GitHub Repository for [Bible Chrome Extension]().
 
 ## Task List
 
-- on startup: 1. check for presence of views 2. check for presence of bookmarks folder
+- implement highlighting
+- reset scrollTop before chapter and verse select
+- on startup check for presence of bookmarks folder
 - implement views and actual bible functionality
-- implement strongs and cross-references
+- change `versionChanged` to `focusVerse`
+- implement scrollTop tracking
+- implement verse tracking
+- focus verse on version change and verse select. restore scrollTop otherwise
+- implement strongs toggling
+- implement strongs viewing
+- implement cross reference viewing
 - implement search functionality
 - implement bookmarking functionality
+- implement open in new view
+- implement open in new view in new tab
+- implement close view
+- implement version switching
+- remeber to attribute all projects that made this possible
+- add command/shortcut to open bible in new tab
+- keyboard accessibility
 
 ### Important
 
@@ -21,7 +36,9 @@ GitHub Repository for [Bible Chrome Extension]().
 
 - Add proper attribution for freepik image
 - Add changelog site and homepage
+- Attribute for all projects that made this possible
 
 ### Docs
 
 - Add reference to video
+- Attribute for all projects that made this possible

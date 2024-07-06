@@ -31,7 +31,10 @@ export function ChapterView() {
               })}
               >${index + 1}</span
             >
-            ${verse.text.replace("\u00b6", "")}
+            ${verse.text
+              .replaceAll("\u00b6", "")
+              .replaceAll("\u2039", "")
+              .replaceAll("\u203a", "")}
           </div>
         `,
       )}

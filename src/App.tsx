@@ -7,27 +7,26 @@ import "@shoelace-style/shoelace/dist/components/icon/icon.js";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/button-group/button-group.js";
 import "@shoelace-style/shoelace/dist/components/select/select.js";
-import "@shoelace-style/shoelace/dist/components/divider/divider.js";
 import "@shoelace-style/shoelace/dist/components/option/option.js";
 import "@shoelace-style/shoelace/dist/components/switch/switch.js";
-import SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
-import { ChapterIndicator } from "./ChapterIndicator";
+import "@shoelace-style/shoelace/dist/components/alert/alert.js";
+import { SlDialog } from "@shoelace-style/shoelace";
+import { ChapterSwitcher } from "./ChapterSwitcher";
 import { Toolbar } from "./Toolbar";
 import { ChapterView } from "./ChapterView";
 import { Dialog } from "./Dialog";
-import { Tree } from "./Tree";
-import { TreeItem } from "./TreeItem";
-import { TreeItemIcon } from "./TreeItemIcon";
-import lucideScrollTextIcon from "./assets/icons/LucideScrollText.svg";
-import { bookNames, versionData } from "./constants";
+import { VersionSwitcher } from "./VersionSwitcher";
+import { BookSelectTree } from "./BookSelectTree";
+import { ChapterSelectTree } from "./ChapterSelectTree";
+import { VerseSelectTree } from "./VerseSelectTree";
 
 // disable animations for all tree items
 setDefaultAnimation("tree-item.expand", null);
 setDefaultAnimation("tree-item.collapse", null);
 
 export const bookSelectTreeDialogRef = createRef<SlDialog>();
-export const chapterSelectDialogRef = createRef<SlDialog>();
-export const verseSelectDialogRef = createRef<SlDialog>();
+export const chapterSelectTreeDialogRef = createRef<SlDialog>();
+export const verseSelectTreeDialogRef = createRef<SlDialog>();
 export const switchViewTreeDialogRef = createRef<SlDialog>();
 export const bookmarkFoldersTreeDialogRef = createRef<SlDialog>();
 export const bookmarksDialogRef = createRef<SlDialog>();
@@ -57,7 +56,7 @@ function App() {
         ${(
           <>
             <ChapterView />
-            <ChapterIndicator />
+            <ChapterSwitcher />
             <Toolbar />
             <Dialog
               label="Select Book"
@@ -65,37 +64,24 @@ function App() {
               fullWidth
               noTopBodyMargin
             >
-              {html`<sl-select
-                value=${versionData[0].id}
-                style=${styleMap({
-                  margin: "0.5rem 0 1rem 0",
-                })}
-              >
-                ${versionData.map(
-                  (versionDatum) => html`
-                    <sl-option value=${versionDatum.id}
-                      >${versionDatum.displayName}</sl-option
-                    >
-                  `,
-                )}
-              </sl-select>`}
-              {html`<sl-divider
-                style=${styleMap({ marginBottom: "1rem" })}
-              ></sl-divider>`}
-              <Tree
-                contentFn={() =>
-                  bookNames.map((bookName) => {
-                    return (
-                      <TreeItem tooltipContent={bookName}>
-                        {html`${(
-                          <TreeItemIcon iconUrl={lucideScrollTextIcon} />
-                        )}`}
-                        {bookName}
-                      </TreeItem>
-                    );
-                  })
-                }
-              />
+              <VersionSwitcher />
+              <BookSelectTree />
+            </Dialog>
+            <Dialog
+              label="Select Chapter"
+              ref={chapterSelectTreeDialogRef}
+              fullWidth
+              noTopBodyMargin
+            >
+              <ChapterSelectTree />
+            </Dialog>
+            <Dialog
+              label="Select Verse"
+              ref={verseSelectTreeDialogRef}
+              fullWidth
+              noTopBodyMargin
+            >
+              <VerseSelectTree />
             </Dialog>
           </>
         )}

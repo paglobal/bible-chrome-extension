@@ -1,5 +1,10 @@
 import { SlAlert } from "@shoelace-style/shoelace";
 import { type LocalStorageKey, AreaName } from "./constants";
+import exclamationCircleIcon from "./assets/icons/exclamation-circle.svg";
+import check2CircleIcon from "./assets/icons/check2-circle.svg";
+import infoCircleIcon from "./assets/icons/info-circle.svg";
+import exclamationTriangleIcon from "./assets/icons/exclamation-triangle.svg";
+import arrowClockwiseIcon from "./assets/icons/arrow-clockwise.svg";
 
 // copied from "https://shoelace.style/components/alert" and slightly modified
 export function notify(
@@ -7,17 +12,17 @@ export function notify(
   variant: Exclude<SlAlert["variant"], "neutral"> = "danger",
   duration: number = 3000,
 ) {
-  const icon = {
-    danger: "exclamation-octagon",
-    success: "check2-circle",
-    primary: "info-circle",
-    warning: "exclamation-triangle",
+  const iconUrls = {
+    danger: exclamationCircleIcon,
+    success: check2CircleIcon,
+    primary: infoCircleIcon,
+    warning: exclamationTriangleIcon,
   };
   const alert = Object.assign(document.createElement("sl-alert"), {
     variant,
     closable: true,
     duration,
-    innerHTML: `<sl-icon name="${icon[variant]}" slot="icon"></sl-icon>${message}`,
+    innerHTML: `<sl-icon src="${iconUrls[variant]}" slot="icon"></sl-icon>${message}`,
   });
   document.body.append(alert);
   alert.toast();
@@ -26,7 +31,7 @@ export function notify(
 export function notifyWithErrorMessageAndReloadButton() {
   const errorMessage =
     "Error occurred while executing action. You can click the button below to attempt to recover.";
-  const reloadButtonHTML = `<sl-icon-button name="arrow-clockwise" title="Reload UI" class="reload-button"></sl-icon-button>`;
+  const reloadButtonHTML = `<sl-icon-button src="${arrowClockwiseIcon}" title="Reload UI" class="reload-button"></sl-icon-button>`;
   const fullMessageContent = `<div>${errorMessage}</div><div style="display: flex; justify-content: center; align-items: center;">${reloadButtonHTML}</div>`;
   notify(fullMessageContent, "danger", 6000);
   document
@@ -64,4 +69,15 @@ export async function subscribeToStorageData<T = unknown>(
       }
     }
   });
+}
+
+export function debounce(callback: (...args: any[]) => void, wait: number) {
+  let timeoutId: number | undefined = undefined;
+
+  return (...args: any[]) => {
+    window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(() => {
+      callback(...args);
+    }, wait);
+  };
 }

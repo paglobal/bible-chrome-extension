@@ -5,6 +5,7 @@ import {
   localStorageKeys,
   lockNames,
   tableOfContents,
+  versionData,
 } from "./constants";
 import {
   getStorageData,
@@ -18,10 +19,9 @@ type Version = {
     copyright_statement: string;
   };
   verses: Array<{
-    book_name: string;
-    book: number;
-    chapter: number;
-    verse: number;
+    bookName: string;
+    chapterNumber: number;
+    verseNumber: number;
     text: string;
   }>;
 };
@@ -31,7 +31,7 @@ export type Verse = Version["verses"][number];
 export type ViewData = Array<
   {
     id: `${number}-${number}`;
-    scrollTop: number;
+    scrollTop: number | null;
     strongsEnabled: boolean;
     versionId: VersionId;
   } & Omit<Verse, "book" | "text">
@@ -47,19 +47,27 @@ export const activeViewDatum = adaptMemo(
   () => viewData().find((viewDatum) => activeViewId() === viewDatum.id) ?? null,
 );
 export const [versionChanged, setVersionChanged] = adaptState(true);
-export const [version, setVersion] = adaptState<Version | null>(null);
-export const [showSpinner, setShowSpinner] = adaptState(true);
+export const [currentVersion, setCurrentVersion] = adaptState<Version | null>(
+  null,
+);
+export const currentVersionDatum = adaptMemo(
+  () =>
+    versionData.find(
+      (versionDatum) => versionDatum.id === activeViewDatum()?.versionId,
+    ) ?? null,
+);
 export const displayedVerses = adaptMemo(() => {
   const _activeViewDatum = activeViewDatum();
   if (_activeViewDatum) {
     const chapterDatum =
-      tableOfContents[_activeViewDatum.book_name][_activeViewDatum.chapter];
-
-    const _version = version();
-    if (_version) {
+      tableOfContents[_activeViewDatum.bookName][
+        _activeViewDatum.chapterNumber
+      ];
+    const _currentVersion = currentVersion();
+    if (_currentVersion) {
       const verses = [];
       for (let i = chapterDatum.startIndex; i <= chapterDatum.endIndex; i++) {
-        const verse = _version.verses[i];
+        const verse = _currentVersion.verses[i];
         verses.push(verse);
       }
 
@@ -69,19 +77,35 @@ export const displayedVerses = adaptMemo(() => {
 
   return [];
 });
+export const [selectedBookName, setSelectedBookName] = adaptState(bookNames[0]);
+export const selectedBookChapterCount = adaptMemo(
+  () => Object.keys(tableOfContents[selectedBookName()]).length,
+);
+export const [selectedChapterNumber, setSelectedChapterNumber] = adaptState(1);
+export const selectedChapterVerseCount = adaptMemo(
+  () => tableOfContents[selectedBookName()][selectedChapterNumber()].verseCount,
+);
+export const [selectedVerseNumber, setSelectedVerseNumber] = adaptState(1);
 
 adaptRenderEffect(async () => {
   // @error
   const _activeViewDatum = activeViewDatum();
-  if (_activeViewDatum && versionChanged()) {
-    const response = await fetch(
-      `./assets/data/${_activeViewDatum.versionId}${
-        _activeViewDatum.strongsEnabled ? "-strongs" : ""
-      }.json`,
-    );
-    setVersion((await response.json()) as Version);
+  if (_activeViewDatum) {
+    if (versionChanged()) {
+      const response = await fetch(
+        `./assets/data/${_activeViewDatum.versionId}${
+          _activeViewDatum.strongsEnabled ? "-strongs" : ""
+        }.json`,
+      );
+      setCurrentVersion((await response.json()) as Version);
+    }
+    const currentChapterTitle = `${_activeViewDatum.bookName} ${
+      _activeViewDatum.chapterNumber
+    }:${
+      _activeViewDatum.verseNumber
+    } - ${_activeViewDatum.versionId.toUpperCase()}`;
+    document.title = currentChapterTitle;
   }
-  setShowSpinner(false);
 });
 
 subscribeToStorageData<ViewData>(localStorageKeys.viewData, async () => {
@@ -97,10 +121,11 @@ subscribeToStorageData<ViewData>(localStorageKeys.viewData, async () => {
         (viewDatum) => viewDatum.id === activeViewId(),
       );
       if (prevActiveViewDatumIndex && prevActiveViewDatumIndex !== -1) {
-        if (prevActiveViewDatumIndex === viewData().length) {
-          setActiveViewId(viewData()[prevActiveViewDatumIndex - 1].id);
+        // @review
+        if (prevActiveViewDatumIndex === newViewData.length) {
+          setActiveViewId(newViewData[prevActiveViewDatumIndex - 1].id);
         } else {
-          setActiveViewId(viewData()[prevActiveViewDatumIndex].id);
+          setActiveViewId(newViewData[prevActiveViewDatumIndex].id);
         }
       }
     }
@@ -133,9 +158,9 @@ export function generateViewDatum(
   return {
     id: viewId(),
     versionId: versionId ?? "kjv",
-    book_name: verse?.book_name ?? bookNames[0],
-    chapter: verse?.chapter ?? 1,
-    verse: verse?.verse ?? 1,
+    bookName: verse?.bookName ?? bookNames[0],
+    chapterNumber: verse?.chapterNumber ?? 1,
+    verseNumber: verse?.verseNumber ?? 1,
     scrollTop: 0,
     strongsEnabled: false,
   };
@@ -176,7 +201,7 @@ export async function deleteView(viewId: ViewId) {
   });
 }
 
-type ViewUpdateOptions = Omit<Partial<ViewDatum>, "id">;
+export type ViewUpdateOptions = Omit<Partial<ViewDatum>, "id">;
 
 export async function updateView(viewId: ViewId, options: ViewUpdateOptions) {
   await navigator.locks.request(lockNames.viewData, async () => {
