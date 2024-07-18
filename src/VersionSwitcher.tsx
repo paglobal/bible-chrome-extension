@@ -4,6 +4,7 @@ import { SlSelect, SlSelectEvent } from "@shoelace-style/shoelace";
 import { activeViewId, currentVersionDatum, updateView } from "./viewService";
 import { versionData } from "./constants";
 import { notifyWithErrorMessageAndReloadButton } from "./utils";
+import { bookSelectTreeDialogRef } from "./App";
 
 export function VersionSwitcher() {
   return () =>
@@ -18,8 +19,10 @@ export function VersionSwitcher() {
           if (_activeViewId) {
             await updateView(_activeViewId, {
               versionId: (e.target as SlSelect).value as string,
+              scrollTop: null,
             });
           }
+          bookSelectTreeDialogRef.value?.hide();
         } catch (error) {
           console.error(error);
           notifyWithErrorMessageAndReloadButton();

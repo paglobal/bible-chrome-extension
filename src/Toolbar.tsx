@@ -3,10 +3,17 @@ import { styleMap } from "lit/directives/style-map.js";
 import { notifyWithErrorMessageAndReloadButton } from "./utils";
 import plusLgIcon from "./assets/icons/plus-lg.svg";
 import searchIcon from "./assets/icons/search.svg";
-import xLgIcon from "./assets/icons/x-lg.svg";
+import xCircleIcon from "./assets/icons/x-circle.svg";
+import plusCircleIcon from "./assets/icons/plus-circle.svg";
 import bookmarksIcon from "./assets/icons/bookmarks.svg";
 import windowStackIcon from "./assets/icons/window-stack.svg";
-import boxArrowInUpRight from "./assets/icons/box-arrow-in-up-right.svg";
+import {
+  activeViewDatum,
+  activeViewId,
+  currentVersionDatum,
+  updateView,
+} from "./viewService";
+import { SlSwitch } from "@shoelace-style/shoelace";
 
 export function Toolbar() {
   return () =>
@@ -35,6 +42,17 @@ export function Toolbar() {
             paddingBottom: "0.2rem",
             marginRight: "-0.1rem",
           })}
+          ?disabled=${!currentVersionDatum()?.hasStrongs}
+          ?checked=${currentVersionDatum()?.hasStrongs &&
+          activeViewDatum()?.strongsEnabled}
+          @sl-change=${async (e: Event) => {
+            const _activeViewId = activeViewId();
+            if (_activeViewId) {
+              await updateView(_activeViewId, {
+                strongsEnabled: (e.target as SlSwitch).checked,
+              });
+            }
+          }}
         ></sl-switch>
         <sl-icon-button
           src=${plusLgIcon}
@@ -50,8 +68,8 @@ export function Toolbar() {
           }}
         ></sl-icon-button>
         <sl-icon-button
-          src=${boxArrowInUpRight}
-          title="Open In New View"
+          src=${plusCircleIcon}
+          title="New View"
           @click=${() => {
             // @handled
             try {
@@ -100,7 +118,7 @@ export function Toolbar() {
           }}
         ></sl-icon-button>
         <sl-icon-button
-          src=${xLgIcon}
+          src=${xCircleIcon}
           title="Close View"
           @click=${() => {
             // @handled

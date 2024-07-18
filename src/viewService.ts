@@ -9,6 +9,7 @@ import {
 } from "./constants";
 import {
   getStorageData,
+  notifyWithErrorMessageAndReloadButton,
   setStorageData,
   subscribeToStorageData,
 } from "./utils";
@@ -88,23 +89,30 @@ export const selectedChapterVerseCount = adaptMemo(
 export const [selectedVerseNumber, setSelectedVerseNumber] = adaptState(1);
 
 adaptRenderEffect(async () => {
-  // @error
-  const _activeViewDatum = activeViewDatum();
-  if (_activeViewDatum) {
-    if (versionChanged()) {
-      const response = await fetch(
-        `./assets/data/${_activeViewDatum.versionId}${
-          _activeViewDatum.strongsEnabled ? "-strongs" : ""
-        }.json`,
-      );
-      setCurrentVersion((await response.json()) as Version);
+  // @handled
+  try {
+    const _activeViewDatum = activeViewDatum();
+    if (_activeViewDatum) {
+      if (versionChanged()) {
+        const response = await fetch(
+          `./assets/data/${_activeViewDatum.versionId}${
+            _activeViewDatum.strongsEnabled && currentVersionDatum()?.hasStrongs
+              ? "-strongs"
+              : ""
+          }.json`,
+        );
+        setCurrentVersion((await response.json()) as Version);
+      }
+      const currentVerseTitle = `${_activeViewDatum.bookName} ${
+        _activeViewDatum.chapterNumber
+      }:${
+        _activeViewDatum.verseNumber
+      } - ${_activeViewDatum.versionId.toUpperCase()}`;
+      document.title = currentVerseTitle;
     }
-    const currentChapterTitle = `${_activeViewDatum.bookName} ${
-      _activeViewDatum.chapterNumber
-    }:${
-      _activeViewDatum.verseNumber
-    } - ${_activeViewDatum.versionId.toUpperCase()}`;
-    document.title = currentChapterTitle;
+  } catch (error) {
+    console.error(error);
+    notifyWithErrorMessageAndReloadButton();
   }
 });
 
@@ -122,11 +130,10 @@ subscribeToStorageData<ViewData>(localStorageKeys.viewData, async () => {
       );
       if (prevActiveViewDatumIndex && prevActiveViewDatumIndex !== -1) {
         // @review
-        if (prevActiveViewDatumIndex === newViewData.length) {
-          setActiveViewId(newViewData[prevActiveViewDatumIndex - 1].id);
-        } else {
-          setActiveViewId(newViewData[prevActiveViewDatumIndex].id);
-        }
+        setActiveViewId(
+          newViewData[prevActiveViewDatumIndex]?.id ??
+            newViewData[newViewData.length - 1].id,
+        );
       }
     }
     if (!newViewData.length) {
@@ -137,9 +144,12 @@ subscribeToStorageData<ViewData>(localStorageKeys.viewData, async () => {
       setViewData(newViewData);
     }
     if (!viewData().some((viewDatum) => viewDatum.id === activeViewId())) {
-      setActiveViewId(viewData()[0].id);
+      setActiveViewId(viewData()[viewData().length - 1].id);
     }
-    if (prevActiveViewDatum?.versionId !== activeViewDatum()?.versionId) {
+    if (
+      prevActiveViewDatum?.versionId !== activeViewDatum()?.versionId ||
+      prevActiveViewDatum?.strongsEnabled !== activeViewDatum()?.strongsEnabled
+    ) {
       setVersionChanged(true);
     } else {
       setVersionChanged(false);
@@ -214,7 +224,7 @@ export async function updateView(viewId: ViewId, options: ViewUpdateOptions) {
       } else {
         const newViewDatum = { ...viewDatum };
         Object.entries(options).forEach(([key, value]) => {
-          if (newViewDatum[key as keyof ViewUpdateOptions]) {
+          if (newViewDatum[key as keyof ViewUpdateOptions] !== undefined) {
             (newViewDatum[
               key as keyof ViewUpdateOptions
             ] as ViewDatum[keyof ViewDatum]) = value;

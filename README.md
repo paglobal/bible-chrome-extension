@@ -9,7 +9,7 @@ GitHub Repository for [Bible Chrome Extension]().
 
 ## Task List
 
-- implement highlighting
+- implement bookmark highlighting
 - reset scrollTop before chapter and verse select
 - on startup check for presence of bookmarks folder
 - implement views and actual bible functionality

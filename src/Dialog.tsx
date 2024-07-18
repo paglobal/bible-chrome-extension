@@ -19,14 +19,6 @@ export function Dialog(props: {
     left: props.fullWidth ? "1rem" : "2rem",
     bottom: "1rem",
   };
-  setTimeout(
-    () =>
-      props.ref.value?.shadowRoot?.addEventListener(
-        "scroll",
-        (e: Event) => console.log((e.target as HTMLElement).scrollTop),
-        true,
-      ),
-  );
 
   return () => html`
     <sl-dialog

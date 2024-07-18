@@ -14,7 +14,7 @@ export function ChapterSwitcher() {
     const _activeViewId = activeViewId();
     let nextChapterUpdateOptions: ViewUpdateOptions | null = null;
     let prevChapterUpdateOptions: ViewUpdateOptions | null = null;
-    let currentChapterTitle: string | null = null;
+    let currentVerseTitle: string | null = null;
     let nextChapterTitle: string | null = null;
     let prevChapterTitle: string | null = null;
     if (_activeViewDatum) {
@@ -31,6 +31,7 @@ export function ChapterSwitcher() {
           bookName,
           chapterNumber: chapterNumber - 1,
           verseNumber: 1,
+          scrollTop: null,
         };
       } else if (prevBookName) {
         const lastChapterNumber = Object.keys(
@@ -40,6 +41,7 @@ export function ChapterSwitcher() {
           bookName: prevBookName,
           chapterNumber: lastChapterNumber,
           verseNumber: 1,
+          scrollTop: null,
         };
       }
       if (tableOfContents[bookName][chapterNumber + 1]) {
@@ -47,15 +49,17 @@ export function ChapterSwitcher() {
           bookName,
           chapterNumber: chapterNumber + 1,
           verseNumber: 1,
+          scrollTop: null,
         };
       } else if (nextBookName) {
         nextChapterUpdateOptions = {
           bookName: nextBookName,
           chapterNumber: 1,
           verseNumber: 1,
+          scrollTop: null,
         };
       }
-      currentChapterTitle = `${_activeViewDatum.bookName} ${
+      currentVerseTitle = `${_activeViewDatum.bookName} ${
         _activeViewDatum.chapterNumber
       }:${
         _activeViewDatum.verseNumber
@@ -114,7 +118,7 @@ export function ChapterSwitcher() {
           textOverflow: "ellipsis",
           padding: "0.5rem",
         })}
-        title=${currentChapterTitle ? currentChapterTitle : ""}
+        title=${currentVerseTitle ? currentVerseTitle : ""}
         @click=${() => {
           // @handled
           try {
@@ -124,7 +128,7 @@ export function ChapterSwitcher() {
             notifyWithErrorMessageAndReloadButton();
           }
         }}
-        >${currentChapterTitle}
+        >${currentVerseTitle}
       </sl-button>
       <sl-button
         ?disabled=${!nextChapterUpdateOptions}

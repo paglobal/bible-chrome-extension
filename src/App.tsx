@@ -39,7 +39,6 @@ function App() {
     html`<div
       id="app"
       style=${styleMap({
-        overflow: "hidden",
         width: "100%",
         minWidth: "100vw",
         height: "100%",
@@ -49,7 +48,7 @@ function App() {
     >
       <div
         style=${styleMap({
-          width: "min(90%, 800px)",
+          width: "min(90%, 50rem)",
           margin: "auto",
         })}
       >

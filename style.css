@@ -29,7 +29,7 @@ html,
 body,
 :root,
 #app {
-  overflow-x: hidden;
+  overflow: hidden;
   scrollbar-color: var(--sl-color-neutral-500) var(--sl-color-neutral-0);
 }
 
@@ -101,11 +101,6 @@ div.actions-container {
   z-index: 2;
 }
 
-sl-dialog::part(panel) {
-  position: absolute;
-  top: 7rem;
-}
-
 sl-dialog::part(title) {
   font-size: 1.1rem;
 }
@@ -130,8 +125,9 @@ sl-button::part(label) {
 }
 
 sl-dialog::part(panel) {
-  max-height: calc(100vh - 4rem);
+  position: absolute;
   top: 2rem;
+  max-height: calc(100vh - 4rem);
 }
 
 sl-button.indicator::part(label) {

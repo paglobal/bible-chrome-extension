@@ -1,19 +1,25 @@
 import { html } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
-import { displayedVerses } from "./viewService";
+import { activeViewDatum, displayedVerses } from "./viewService";
+import { createRef, ref } from "lit/directives/ref.js";
 
 export function ChapterView() {
-  return () =>
-    html`<div
+  const currentVerseDivRef = createRef<HTMLDivElement>();
+
+  return () => {
+    const _activeViewDatum = activeViewDatum();
+
+    return html`<div
       style=${styleMap({
         overflowY: "auto",
         height: "calc(100vh - 7.75rem - 1.5rem)",
         marginTop: "1rem",
       })}
     >
-      ${displayedVerses().map(
-        (verse, index) => html`
+      ${displayedVerses().map((verse, index) => {
+        return html`
           <div
+            ${ref(currentVerseDivRef)}
             style=${styleMap({
               fontSize: "var(--sl-font-size-medium)",
               lineHeight: "150%",
@@ -36,7 +42,8 @@ export function ChapterView() {
               .replaceAll("\u2039", "")
               .replaceAll("\u203a", "")}
           </div>
-        `,
-      )}
+        `;
+      })}
     </div>`;
+  };
 }
