@@ -87,6 +87,7 @@ export const selectedChapterVerseCount = adaptMemo(
   () => tableOfContents[selectedBookName()][selectedChapterNumber()].verseCount,
 );
 export const [selectedVerseNumber, setSelectedVerseNumber] = adaptState(1);
+export const [canUpdateScrollTop, setCanUpdateScrollTop] = adaptState(false);
 
 adaptRenderEffect(async () => {
   // @handled
@@ -154,6 +155,9 @@ subscribeToStorageData<ViewData>(localStorageKeys.viewData, async () => {
     } else {
       setVersionChanged(false);
     }
+    if (activeViewDatum()?.scrollTop === null) {
+      setCanUpdateScrollTop(false);
+    }
   });
 });
 
@@ -171,7 +175,7 @@ export function generateViewDatum(
     bookName: verse?.bookName ?? bookNames[0],
     chapterNumber: verse?.chapterNumber ?? 1,
     verseNumber: verse?.verseNumber ?? 1,
-    scrollTop: 0,
+    scrollTop: null,
     strongsEnabled: false,
   };
 }

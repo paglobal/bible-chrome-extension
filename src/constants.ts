@@ -47,6 +47,8 @@ export const lockNames = {
   viewData: "lock-1",
 } as const satisfies Record<string, LockName>;
 
+export const delayTimeInMs = 200;
+
 export {
   crossReferences_json,
   strongsHebrewDictionary_json,

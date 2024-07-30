@@ -50,6 +50,7 @@ export function Toolbar() {
             if (_activeViewId) {
               await updateView(_activeViewId, {
                 strongsEnabled: (e.target as SlSwitch).checked,
+                scrollTop: null,
               });
             }
           }}

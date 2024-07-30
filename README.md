@@ -10,10 +10,9 @@ GitHub Repository for [Bible Chrome Extension]().
 ## Task List
 
 - implement bookmark highlighting
-- reset scrollTop before chapter and verse select
 - on startup check for presence of bookmarks folder
+- reset scrollTop before chapter and verse select
 - implement views and actual bible functionality
-- change `versionChanged` to `focusVerse`
 - implement scrollTop tracking
 - implement verse tracking
 - focus verse on version change and verse select. restore scrollTop otherwise
