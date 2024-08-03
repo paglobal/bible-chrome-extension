@@ -5,7 +5,6 @@ import plusLgIcon from "./assets/icons/plus-lg.svg";
 import searchIcon from "./assets/icons/search.svg";
 import xCircleIcon from "./assets/icons/x-circle.svg";
 import plusCircleIcon from "./assets/icons/plus-circle.svg";
-import bookmarksIcon from "./assets/icons/bookmarks.svg";
 import windowStackIcon from "./assets/icons/window-stack.svg";
 import {
   activeViewDatum,
@@ -50,7 +49,7 @@ export function Toolbar() {
             if (_activeViewId) {
               await updateView(_activeViewId, {
                 strongsEnabled: (e.target as SlSwitch).checked,
-                scrollTop: null,
+                scrollTopPercent: null,
               });
             }
           }}
@@ -86,19 +85,6 @@ export function Toolbar() {
           @click=${async () => {
             // @handled
             try {
-            } catch (error) {
-              console.error(error);
-              notifyWithErrorMessageAndReloadButton();
-            }
-          }}
-        ></sl-icon-button>
-        <sl-icon-button
-          src=${bookmarksIcon}
-          title="Bookmarks"
-          @click=${() => {
-            // @handled
-            try {
-              //importTabGroupFromSessionTreeDialogRef.value?.show();
             } catch (error) {
               console.error(error);
               notifyWithErrorMessageAndReloadButton();

@@ -9,26 +9,29 @@ import {
   updateView,
 } from "./viewService";
 import { createRef, ref } from "lit/directives/ref.js";
-import { adaptEffect } from "promethium-js";
-import { debounce } from "./utils";
-import { delayTimeInMs } from "./constants";
+import { notifyWithErrorMessageAndReloadButton } from "./utils";
+import chatDotsIcon from "./assets/icons/chat-dots.svg";
 
 const chapterContainerDivRef = createRef<HTMLDivElement>();
 
-const updateViewScrollTop = debounce(() => {
+const updateViewScrollTop = () => {
   if (canUpdateScrollTop()) {
     const _activeViewId = activeViewId();
-    if (_activeViewId) {
+    if (_activeViewId && chapterContainerDivRef.value) {
+      const scrollTopPercent =
+        chapterContainerDivRef.value.scrollTop /
+        (chapterContainerDivRef.value.scrollHeight -
+          chapterContainerDivRef.value.clientHeight);
       setTimeout(() => {
         updateView(_activeViewId, {
-          scrollTop: chapterContainerDivRef.value?.scrollTop,
+          scrollTopPercent,
         });
       });
     }
   } else {
     setCanUpdateScrollTop(true);
   }
-}, delayTimeInMs);
+};
 
 export function ChapterView() {
   return () => {
@@ -39,7 +42,7 @@ export function ChapterView() {
         height: "calc(100vh - 7.75rem - 1.5rem)",
         marginTop: "1rem",
       })}
-      @scroll=${updateViewScrollTop}
+      @scrollend=${updateViewScrollTop}
     >
       ${displayedVerses().map((verse, index) => {
         let isCurrentVerse = false;
@@ -55,20 +58,35 @@ export function ChapterView() {
           <div
             ${ref((verseDiv) => {
               setTimeout(() => {
-                if (isCurrentVerse && activeViewDatum()?.scrollTop === null) {
+                if (
+                  isCurrentVerse &&
+                  activeViewDatum()?.scrollTopPercent === null
+                ) {
                   verseDiv?.scrollIntoView({
-                    behavior: "instant",
+                    behavior: "smooth",
                     block: "start",
                     inline: "nearest",
                   });
-                } else if (index === displayedVerses().length - 1) {
-                  if (typeof activeViewDatum()?.scrollTop === "number") {
+                } else if (
+                  index === displayedVerses().length - 1 &&
+                  chapterContainerDivRef.value
+                ) {
+                  if (typeof activeViewDatum()?.scrollTopPercent === "number") {
+                    const scrollTopPercent =
+                      chapterContainerDivRef.value.scrollTop /
+                      (chapterContainerDivRef.value.scrollHeight -
+                        chapterContainerDivRef.value.clientHeight);
                     if (
-                      chapterContainerDivRef.value?.scrollTop !==
-                      activeViewDatum()?.scrollTop
+                      Math.abs(
+                        scrollTopPercent -
+                          (activeViewDatum()?.scrollTopPercent ?? 0),
+                      ) >= 0.02
                     ) {
                       chapterContainerDivRef.value?.scrollTo({
-                        top: activeViewDatum()?.scrollTop ?? 0,
+                        top:
+                          (activeViewDatum()?.scrollTopPercent ?? 0) *
+                          (chapterContainerDivRef.value.scrollHeight -
+                            chapterContainerDivRef.value.clientHeight),
                         behavior: "instant",
                       });
                     } else {
@@ -84,26 +102,59 @@ export function ChapterView() {
               color: "var(--sl-color-neutral-800)",
               marginTop: "1rem",
               border: isCurrentVerse
-                ? "0.2rem solid var(--sl-color-primary-600)"
+                ? "0.15rem solid var(--sl-color-primary-600)"
                 : undefined,
-              borderRadius: "1rem",
+              borderRadius: "0.5rem",
               padding: "0.5rem",
             })}
           >
             <span
               style=${styleMap({
                 fontSize: "var(--sl-font-size-small)",
-                color: "var(--sl-color-neutral-600)",
+                color: isCurrentVerse
+                  ? "var(--sl-color-primary-600)"
+                  : "var(--sl-color-neutral-600)",
                 marginRight: "var(--sl-spacing-2x-small)",
                 display: "inline-block",
                 transform: "translate(0, -0.5rem)",
+                cursor: "pointer",
+                borderBottom: isCurrentVerse
+                  ? "0.1rem solid var(--sl-color-primary-600)"
+                  : "0.1rem solid",
               })}
+              @click=${() => {
+                // @handled
+                try {
+                  const _activeViewId = activeViewId();
+                  if (_activeViewId) {
+                    updateView(_activeViewId, {
+                      verseNumber: verse.verseNumber,
+                      scrollTopPercent: null,
+                    });
+                  }
+                } catch (error) {
+                  console.error(error);
+                  notifyWithErrorMessageAndReloadButton();
+                }
+              }}
               >${index + 1}</span
             >
             ${verse.text
               .replaceAll("\u00b6", "")
               .replaceAll("\u2039", "")
               .replaceAll("\u203a", "")}
+            <sl-icon-button
+              src=${chatDotsIcon}
+              title="References"
+              @click=${() => {
+                // @handled
+                try {
+                } catch (error) {
+                  console.error(error);
+                  notifyWithErrorMessageAndReloadButton();
+                }
+              }}
+            ></sl-icon-button>
           </div>
         `;
       })}

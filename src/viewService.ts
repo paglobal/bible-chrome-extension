@@ -32,7 +32,7 @@ export type Verse = Version["verses"][number];
 export type ViewData = Array<
   {
     id: `${number}-${number}`;
-    scrollTop: number | null;
+    scrollTopPercent: number | null;
     strongsEnabled: boolean;
     versionId: VersionId;
   } & Omit<Verse, "book" | "text">
@@ -155,7 +155,7 @@ subscribeToStorageData<ViewData>(localStorageKeys.viewData, async () => {
     } else {
       setVersionChanged(false);
     }
-    if (activeViewDatum()?.scrollTop === null) {
+    if (activeViewDatum()?.scrollTopPercent === null) {
       setCanUpdateScrollTop(false);
     }
   });
@@ -175,7 +175,7 @@ export function generateViewDatum(
     bookName: verse?.bookName ?? bookNames[0],
     chapterNumber: verse?.chapterNumber ?? 1,
     verseNumber: verse?.verseNumber ?? 1,
-    scrollTop: null,
+    scrollTopPercent: null,
     strongsEnabled: false,
   };
 }

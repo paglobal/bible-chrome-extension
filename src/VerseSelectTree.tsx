@@ -44,7 +44,7 @@ export function VerseSelectTree() {
                       bookName: selectedBookName(),
                       chapterNumber: selectedChapterNumber(),
                       verseNumber: selectedVerseNumber(),
-                      scrollTop: null,
+                      scrollTopPercent: null,
                     });
                   } else {
                     // @handle

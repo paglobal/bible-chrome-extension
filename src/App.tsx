@@ -28,11 +28,8 @@ export const bookSelectTreeDialogRef = createRef<SlDialog>();
 export const chapterSelectTreeDialogRef = createRef<SlDialog>();
 export const verseSelectTreeDialogRef = createRef<SlDialog>();
 export const switchViewTreeDialogRef = createRef<SlDialog>();
-export const bookmarkFoldersTreeDialogRef = createRef<SlDialog>();
-export const bookmarksDialogRef = createRef<SlDialog>();
 export const searchScriptureDialogRef = createRef<SlDialog>();
 export const verseReferenceTreeDialogRef = createRef<SlDialog>();
-export const strongsInfoDialogRef = createRef<SlDialog>();
 
 function App() {
   return () =>

@@ -19,7 +19,7 @@ export function VersionSwitcher() {
           if (_activeViewId) {
             await updateView(_activeViewId, {
               versionId: (e.target as SlSelect).value as string,
-              scrollTop: null,
+              scrollTopPercent: null,
             });
           }
           bookSelectTreeDialogRef.value?.hide();

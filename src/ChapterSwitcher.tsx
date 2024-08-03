@@ -31,7 +31,7 @@ export function ChapterSwitcher() {
           bookName,
           chapterNumber: chapterNumber - 1,
           verseNumber: 1,
-          scrollTop: null,
+          scrollTopPercent: null,
         };
       } else if (prevBookName) {
         const lastChapterNumber = Object.keys(
@@ -41,7 +41,7 @@ export function ChapterSwitcher() {
           bookName: prevBookName,
           chapterNumber: lastChapterNumber,
           verseNumber: 1,
-          scrollTop: null,
+          scrollTopPercent: null,
         };
       }
       if (tableOfContents[bookName][chapterNumber + 1]) {
@@ -49,14 +49,14 @@ export function ChapterSwitcher() {
           bookName,
           chapterNumber: chapterNumber + 1,
           verseNumber: 1,
-          scrollTop: null,
+          scrollTopPercent: null,
         };
       } else if (nextBookName) {
         nextChapterUpdateOptions = {
           bookName: nextBookName,
           chapterNumber: 1,
           verseNumber: 1,
-          scrollTop: null,
+          scrollTopPercent: null,
         };
       }
       currentVerseTitle = `${_activeViewDatum.bookName} ${
