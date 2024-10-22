@@ -1,6 +1,4 @@
 import { html } from "lit";
-import "@shoelace-style/shoelace/dist/components/tree-item/tree-item.js";
-import type SlTreeItem from "@shoelace-style/shoelace/dist/components/tree-item/tree-item.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { PromethiumNode, adaptEffect, adaptState } from "promethium-js";
 import { createRef, ref } from "lit/directives/ref.js";
@@ -10,8 +8,9 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   attachClosestEdge,
   extractClosestEdge,
-  type Edge,
+  Edge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import { SlButtonGroup, SlTreeItem } from "@shoelace-style/shoelace";
 
 type DraggableOptions = Parameters<typeof draggable>[0];
 type DropTargetOptions = Parameters<typeof dropTargetForElements>[0];
@@ -31,6 +30,7 @@ export function TreeItem(props: {
   const [draggedOverEdge, setDraggedOverEdge] = adaptState<Edge | null>(null);
   const [dragging, setDragging] = adaptState(false);
   const treeItemRef = createRef<SlTreeItem>();
+  const buttonGroupRef = createRef<SlButtonGroup>();
 
   adaptEffect(() => {
     if (
@@ -92,6 +92,18 @@ export function TreeItem(props: {
         dropTargetForElements(props.dropTargetOptions as DropTargetOptions),
       );
     }
+  }, []);
+
+  adaptEffect(() => {
+    (
+      Array.from(buttonGroupRef.value?.children ?? []) as Array<HTMLElement>
+    ).forEach((iconButton) => {
+      iconButton.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          iconButton.click();
+        }
+      });
+    });
   }, []);
 
   return () => {

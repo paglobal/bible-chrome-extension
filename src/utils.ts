@@ -1,8 +1,8 @@
 import { SlAlert } from "@shoelace-style/shoelace";
 import { type LocalStorageKey, AreaName } from "./constants";
+import infoCircleIcon from "./assets/icons/info-circle.svg";
 import exclamationCircleIcon from "./assets/icons/exclamation-circle.svg";
 import check2CircleIcon from "./assets/icons/check2-circle.svg";
-import infoCircleIcon from "./assets/icons/info-circle.svg";
 import exclamationTriangleIcon from "./assets/icons/exclamation-triangle.svg";
 import arrowClockwiseIcon from "./assets/icons/arrow-clockwise.svg";
 
@@ -71,13 +71,13 @@ export async function subscribeToStorageData<T = unknown>(
   });
 }
 
-export function debounce(callback: (...args: any[]) => void, wait: number) {
-  let timeoutId: number | undefined = undefined;
+export function debounce(callback: () => void, timeout: number) {
+  let timeoutId: number | undefined | NodeJS.Timeout;
 
-  return (...args: any[]) => {
-    window.clearTimeout(timeoutId);
-    timeoutId = window.setTimeout(() => {
-      callback(...args);
-    }, wait);
+  return () => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      callback();
+    }, timeout);
   };
 }

@@ -11,6 +11,7 @@ import {
   viewData,
 } from "./viewService";
 import { localStorageKeys, lockNames } from "./constants";
+import "./customElements";
 
 (async function () {
   // @error

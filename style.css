@@ -48,10 +48,6 @@ body {
   }
 }
 
-sl-tree-item img {
-  position: relative;
-}
-
 /* remove default outline to make way for our outline */
 sl-tree-item:focus-visible::part(item) {
   outline: none;
@@ -95,10 +91,6 @@ sl-dialog sl-tree-item[selected] sl-button-group {
 sl-tree-item sl-icon-button::part(base):focus-visible {
   outline: 0.2rem solid var(--sl-color-primary-700);
   outline-offset: -0.2rem;
-}
-
-div.actions-container {
-  z-index: 2;
 }
 
 sl-dialog::part(title) {

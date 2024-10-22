@@ -1,4 +1,10 @@
-import { adaptMemo, adaptRenderEffect, adaptState } from "promethium-js";
+import {
+  adaptEffect,
+  adaptMemo,
+  adaptRenderEffect,
+  adaptState,
+  adaptSyncEffect,
+} from "promethium-js";
 import {
   VersionId,
   bookNames,
@@ -44,6 +50,7 @@ export type ViewId = ViewDatum["id"];
 
 export const [viewData, setViewData] = adaptState<ViewData>([]);
 export const [activeViewId, setActiveViewId] = adaptState<ViewId | null>(null);
+// console.log("activeViewDatum");
 export const activeViewDatum = adaptMemo(
   () => viewData().find((viewDatum) => activeViewId() === viewDatum.id) ?? null,
 );
@@ -51,12 +58,16 @@ export const [versionChanged, setVersionChanged] = adaptState(true);
 export const [currentVersion, setCurrentVersion] = adaptState<Version | null>(
   null,
 );
-export const currentVersionDatum = adaptMemo(
-  () =>
+// console.log("currentVersionDatum");
+export const currentVersionDatum = adaptMemo(() => {
+  const a =
     versionData.find(
       (versionDatum) => versionDatum.id === activeViewDatum()?.versionId,
-    ) ?? null,
-);
+    ) ?? null;
+
+  return a;
+});
+// console.log("displayedVerses");
 export const displayedVerses = adaptMemo(() => {
   const _activeViewDatum = activeViewDatum();
   if (_activeViewDatum) {
@@ -79,15 +90,26 @@ export const displayedVerses = adaptMemo(() => {
   return [];
 });
 export const [selectedBookName, setSelectedBookName] = adaptState(bookNames[0]);
+// console.log("selectedBookChapterCount");
 export const selectedBookChapterCount = adaptMemo(
   () => Object.keys(tableOfContents[selectedBookName()]).length,
 );
 export const [selectedChapterNumber, setSelectedChapterNumber] = adaptState(1);
+// console.log("selectedChapterVerseCount");
 export const selectedChapterVerseCount = adaptMemo(
   () => tableOfContents[selectedBookName()][selectedChapterNumber()].verseCount,
 );
 export const [selectedVerseNumber, setSelectedVerseNumber] = adaptState(1);
 export const [canUpdateScrollTop, setCanUpdateScrollTop] = adaptState(false);
+
+// adaptSyncEffect(() => {
+//   console.log(
+//     "hooo",
+//     currentVersionDatum(),
+//     activeViewDatum(),
+//     displayedVerses(),
+//   );
+// });
 
 adaptRenderEffect(async () => {
   // @handled
